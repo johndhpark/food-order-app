@@ -1,6 +1,6 @@
-import MealItem from "./MealItem/MealItem";
 import Card from "../UI/Card";
 import classes from "./AvailableMeals.module.css";
+import MealItem from "./MealItem/MealItem";
 
 const AvailableMeals = ({ meals }) => {
   const renderMeals = meals.map((meal) => (
