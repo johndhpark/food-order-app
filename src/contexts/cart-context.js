@@ -2,6 +2,8 @@ import React, { useReducer, useState } from "react";
 
 const CartContext = React.createContext({
   items: [],
+  cartCount: 0,
+  cartTotal: 0.0,
   isActive: false,
   onCartClick: () => {},
   onAddItemToCart: () => {},
@@ -11,20 +13,32 @@ const CartContext = React.createContext({
 function cartReducer(state, action) {
   switch (action.type) {
     case "ADD_ITEM": {
-      const newState = [...state];
-      const idx = newState.findIndex((item) => item.id === action.payload.id);
+      const newState = { ...state };
+      const idx = newState.items.findIndex(
+        (item) => item.id === action.payload.id
+      );
 
-      if (idx !== -1) newState[idx].count += action.payload.count;
-      else newState.push(action.payload);
+      if (idx !== -1) newState.items[idx].amount += action.payload.amount;
+      else newState.items.push(action.payload);
+
+      newState.total += action.payload.price * action.payload.amount;
+      newState.count += action.payload.amount;
 
       return newState;
     }
     case "REMOVE_ITEM": {
-      const newState = [...state];
-      const idx = newState.findIndex((item) => item.id === action.payload.id);
+      const newState = { ...state };
+      const idx = newState.items.findIndex(
+        (item) => item.id === action.payload.id
+      );
 
-      if (newState[idx].count === 1) newState.splice(idx, 1);
-      else newState[idx] -= 1;
+      if (idx === -1) return newState;
+
+      if (newState.items[idx].amount === 1) newState.items.splice(idx, 1);
+      else newState.items[idx].amount -= 1;
+
+      newState.total = Math.abs(newState.total - action.payload.price);
+      newState.count -= 1;
 
       return newState;
     }
@@ -34,8 +48,12 @@ function cartReducer(state, action) {
   }
 }
 
-const CartContextProvider = ({ children }) => {
-  const [cartState, dispatchCart] = useReducer(cartReducer, []);
+const CartProvider = ({ children }) => {
+  const [cartState, dispatchCart] = useReducer(cartReducer, {
+    items: [],
+    count: 0,
+    total: 0.0,
+  });
   const [active, setActive] = useState(false);
 
   const cartClickHandler = () => {
@@ -43,12 +61,14 @@ const CartContextProvider = ({ children }) => {
   };
 
   const addItemToCartHandler = (item) => {
-    dispatchCart({ type: "ADD_ITEM" });
+    dispatchCart({ type: "ADD_ITEM", payload: item });
   };
 
   const removeItemFromCartHandler = (item) => {
-    dispatchCart({ type: "REMOVE_ITEM" });
+    dispatchCart({ type: "REMOVE_ITEM", payload: item });
   };
+
+  const { total, items, count } = cartState;
 
   return (
     <CartContext.Provider
@@ -57,7 +77,9 @@ const CartContextProvider = ({ children }) => {
         onCartClick: cartClickHandler,
         onAddItemToCart: addItemToCartHandler,
         onRemoveItemFromCart: removeItemFromCartHandler,
-        items: cartState,
+        cartTotal: total,
+        items: items,
+        cartCount: count,
       }}
     >
       {children}
@@ -65,4 +87,4 @@ const CartContextProvider = ({ children }) => {
   );
 };
 
-export { CartContext as default, CartContextProvider };
+export { CartContext as default, CartProvider };

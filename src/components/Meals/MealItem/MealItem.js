@@ -2,7 +2,7 @@ import classes from "./MealItem.module.css";
 import MealItemForm from "./MealItemForm";
 
 const MealItem = ({ meal }) => {
-  const { id, name, description, price } = meal;
+  const { name, description, price } = meal;
 
   return (
     <li className={classes.meal}>
@@ -14,7 +14,7 @@ const MealItem = ({ meal }) => {
         </div>
       </div>
       <div>
-        <MealItemForm id={id} />
+        <MealItemForm meal={meal} />
       </div>
     </li>
   );

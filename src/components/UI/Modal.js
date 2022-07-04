@@ -1,21 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import classes from "./Modal.module.css";
 import Card from "./Card";
-import Cart from "../Cart/Cart";
+import classes from "./Modal.module.css";
 
-const Backdrop = () => {
-  return <div className={classes.backdrop}></div>;
+const Backdrop = ({ onClick }) => {
+  return <div className={classes.backdrop} onClick={onClick}></div>;
 };
 
 const ModalOverlay = ({ children }) => {
   return <Card className={classes.modal}>{children}</Card>;
 };
 
-const Modal = ({ children }) => (
+const Modal = ({ onBackdropClick, children }) => (
   <React.Fragment>
     {ReactDOM.createPortal(
-      <Backdrop />,
+      <Backdrop onClick={onBackdropClick} />,
       document.getElementById("backdrop-root")
     )}
     {ReactDOM.createPortal(
