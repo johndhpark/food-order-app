@@ -4,7 +4,7 @@ import Modal from "../UI/Modal";
 import classes from "./Cart.module.css";
 import CartItem from "./CartItem";
 
-const Cart = ({ items }) => {
+const Cart = () => {
   const ctx = useContext(CartContext);
 
   const removeItemHandler = (item) => {
@@ -15,16 +15,14 @@ const Cart = ({ items }) => {
     ctx.onAddItemToCart({ ...item, amount: 1 });
   };
 
-  const cartItems = ctx.items.map((item) => {
-    return (
-      <CartItem
-        key={item.id}
-        item={item}
-        onRemove={removeItemHandler}
-        onAdd={addItemHandler}
-      />
-    );
-  });
+  const cartItems = ctx.items.map((item) => (
+    <CartItem
+      key={item.id}
+      item={item}
+      onRemove={removeItemHandler}
+      onAdd={addItemHandler}
+    />
+  ));
 
   return (
     <Modal onBackdropClick={ctx.onCartClick}>

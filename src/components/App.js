@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import CartContext from "../contexts/cart-context";
 import Cart from "./Cart/Cart";
 import Header from "./Header/Header";
@@ -31,15 +31,15 @@ const DUMMY_MEALS = [
   },
 ];
 
-const App = (props) => {
+const App = () => {
   const ctx = useContext(CartContext);
 
   return (
-    <React.Fragment>
+    <>
       {ctx.isActive && <Cart />}
       <Header />
       <Meals meals={DUMMY_MEALS} />
-    </React.Fragment>
+    </>
   );
 };
 

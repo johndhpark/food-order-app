@@ -8,7 +8,7 @@
 }
 
 .cart-item h2 {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.5rem;
   color: #363636;
 }
 
@@ -54,8 +54,7 @@
   border-radius: 6px;
   background-color: transparent;
   cursor: pointer;
-  margin-left: 1rem;
-  margin: 0.25rem;
+  margin: 0.25rem 0.25rem 0.25rem 1rem;
 }
 
 .cart-item button:hover,

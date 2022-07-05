@@ -3,12 +3,12 @@ import CartContext from "../../contexts/cart-context";
 import CartIcon from "./CartIcon";
 import classes from "./HeaderCartButton.module.css";
 
-const HeaderCartButton = (props) => {
+const HeaderCartButton = () => {
   const [btnIsHighlighted, setBtnIsHighlighted] = useState(false);
   const ctx = useContext(CartContext);
 
   useEffect(() => {
-    if (ctx.cartCount === 0) return;
+    if (ctx.cartCount === 0) return () => {};
 
     setBtnIsHighlighted(true);
 

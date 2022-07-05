@@ -1,7 +1,8 @@
+import PropTypes from "prop-types";
 import { useContext, useRef } from "react";
+import CartContext from "../../../contexts/cart-context";
 import Input from "../../UI/Input";
 import classes from "./MealItemForm.module.css";
-import CartContext from "../../../contexts/cart-context";
 
 const MealItemForm = ({ meal }) => {
   const ctx = useContext(CartContext);
@@ -32,6 +33,15 @@ const MealItemForm = ({ meal }) => {
       <button type="submit">+ Add</button>
     </form>
   );
+};
+
+MealItemForm.propTypes = {
+  meal: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default MealItemForm;
