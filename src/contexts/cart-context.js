@@ -49,7 +49,7 @@ function cartReducer(state, action) {
 }
 
 const CartProvider = ({ children }) => {
-  const [cartState, dispatchCart] = useReducer(cartReducer, {
+  const [cartState, dispatchCartAction] = useReducer(cartReducer, {
     items: [],
     count: 0,
     total: 0.0,
@@ -61,11 +61,11 @@ const CartProvider = ({ children }) => {
   };
 
   const addItemToCartHandler = (item) => {
-    dispatchCart({ type: "ADD_ITEM", payload: item });
+    dispatchCartAction({ type: "ADD_ITEM", payload: item });
   };
 
   const removeItemFromCartHandler = (item) => {
-    dispatchCart({ type: "REMOVE_ITEM", payload: item });
+    dispatchCartAction({ type: "REMOVE_ITEM", payload: item });
   };
 
   const { total, items, count } = cartState;

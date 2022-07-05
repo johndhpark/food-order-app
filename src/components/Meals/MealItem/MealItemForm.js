@@ -5,7 +5,6 @@ import CartContext from "../../../contexts/cart-context";
 
 const MealItemForm = ({ meal }) => {
   const ctx = useContext(CartContext);
-
   const ref = useRef();
 
   const submitItemHandler = (event) => {

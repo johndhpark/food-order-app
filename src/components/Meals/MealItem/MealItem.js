@@ -10,7 +10,7 @@ const MealItem = ({ meal }) => {
         <div>
           <h3>{name}</h3>
           <div className={classes.description}>{description}</div>
-          <div className={classes.price}>{`$${price}`}</div>
+          <div className={classes.price}>{`$${price.toFixed(2)}`}</div>
         </div>
       </div>
       <div>
