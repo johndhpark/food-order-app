@@ -1,4 +1,5 @@
-import React, { useReducer, useState } from "react";
+import PropTypes from "prop-types";
+import React, { useCallback, useMemo, useReducer, useState } from "react";
 
 const CartContext = React.createContext({
   items: [],
@@ -48,7 +49,7 @@ function cartReducer(state, action) {
   }
 }
 
-const CartProvider = ({ children }) => {
+export const CartProvider = ({ children }) => {
   const [cartState, dispatchCartAction] = useReducer(cartReducer, {
     items: [],
     count: 0,
@@ -56,9 +57,9 @@ const CartProvider = ({ children }) => {
   });
   const [active, setActive] = useState(false);
 
-  const cartClickHandler = () => {
+  const memoizedCartClickHandler = useCallback(() => {
     setActive(!active);
-  };
+  }, [active]);
 
   const addItemToCartHandler = (item) => {
     dispatchCartAction({ type: "ADD_ITEM", payload: item });
@@ -70,21 +71,26 @@ const CartProvider = ({ children }) => {
 
   const { total, items, count } = cartState;
 
+  const cartObj = useMemo(
+    () => ({
+      isActive: active,
+      onCartClick: memoizedCartClickHandler,
+      onAddItemToCart: addItemToCartHandler,
+      onRemoveItemFromCart: removeItemFromCartHandler,
+      cartTotal: total,
+      items,
+      cartCount: count,
+    }),
+    [active, memoizedCartClickHandler, count, items, total]
+  );
+
   return (
-    <CartContext.Provider
-      value={{
-        isActive: active,
-        onCartClick: cartClickHandler,
-        onAddItemToCart: addItemToCartHandler,
-        onRemoveItemFromCart: removeItemFromCartHandler,
-        cartTotal: total,
-        items: items,
-        cartCount: count,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
+    <CartContext.Provider value={cartObj}>{children}</CartContext.Provider>
   );
 };
 
-export { CartContext as default, CartProvider };
+CartProvider.propTypes = {
+  children: PropTypes.element.isRequired,
+};
+
+export default CartContext;
