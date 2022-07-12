@@ -50,7 +50,7 @@ const Cart = () => {
           <span>Total Amount</span>
           <span>{`$${ctx.cartTotal.toFixed(2)}`}</span>
         </div>
-        {orderClicked && <Checkout />}
+        {orderClicked && <Checkout onCancelClick={ctx.onCartClick} />}
         {!orderClicked && modalActions}
       </Card>
     </Modal>
