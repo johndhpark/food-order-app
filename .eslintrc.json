@@ -7,6 +7,8 @@
   "extends": ["airbnb", "airbnb/hooks", "plugin:react/jsx-runtime", "prettier"],
   "rules": {
     "arrow-body-style": ["warn", "as-needed"],
+    "jsx-a11y/label-has-associated-control": "off",
+    "no-unused-vars": "off",
     "react/button-has-type": [
       0,
       {

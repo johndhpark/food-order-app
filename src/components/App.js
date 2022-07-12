@@ -12,6 +12,8 @@ const App = () => {
       {ctx.isActive && <Cart />}
       <Header />
       <Meals />
+      <input type="text" />
+      <input type="text" />
     </>
   );
 };
