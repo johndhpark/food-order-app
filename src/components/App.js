@@ -5,15 +5,15 @@ import Header from "./Header/Header";
 import Meals from "./Meals/Meals";
 
 const App = () => {
-  const ctx = useContext(CartContext);
+	const ctx = useContext(CartContext);
 
-  return (
-    <>
-      {ctx.isActive && <Cart />}
-      <Header />
-      <Meals />
-    </>
-  );
+	return (
+		<>
+			{ctx.isActive && <Cart />}
+			<Header />
+			<Meals />
+		</>
+	);
 };
 
 export default App;

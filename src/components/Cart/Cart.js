@@ -1,60 +1,61 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import CartContext from "../../contexts/cart-context";
+import Card from "../UI/Card";
 import Modal from "../UI/Modal";
 import classes from "./Cart.module.css";
 import CartItem from "./CartItem";
 import Checkout from "./Checkout";
-import Card from "../UI/Card";
 
 const Cart = () => {
-  const [orderClicked, setOrderClicked] = useState(false);
-  const ctx = useContext(CartContext);
+	const [orderClicked, setOrderClicked] = useState(false);
 
-  const removeItemHandler = (item) => {
-    ctx.onRemoveItemFromCart({ ...item });
-  };
+	const ctx = useContext(CartContext);
 
-  const addItemHandler = (item) => {
-    ctx.onAddItemToCart({ ...item, amount: 1 });
-  };
+	const removeItemHandler = (item) => {
+		ctx.onRemoveItemFromCart({ ...item });
+	};
 
-  const orderClickHandler = () => {
-    setOrderClicked(true);
-  };
+	const addItemHandler = (item) => {
+		ctx.onAddItemToCart({ ...item, amount: 1 });
+	};
 
-  const cartItems = ctx.items.map((item) => (
-    <CartItem
-      key={item.id}
-      item={item}
-      onRemove={removeItemHandler}
-      onAdd={addItemHandler}
-    />
-  ));
+	const orderClickHandler = () => {
+		setOrderClicked(true);
+	};
 
-  const modalActions = (
-    <div className={classes.actions}>
-      <button className={classes["button--alt"]} onClick={ctx.onCartClick}>
-        Close
-      </button>
-      <button className={classes.button} onClick={orderClickHandler}>
-        Order
-      </button>
-    </div>
-  );
+	const cartItems = ctx.items.map((item) => (
+		<CartItem
+			key={item.id}
+			item={item}
+			onRemove={removeItemHandler}
+			onAdd={addItemHandler}
+		/>
+	));
 
-  return (
-    <Modal onBackdropClick={ctx.onCartClick}>
-      <Card>
-        <ul className={classes["cart-items"]}>{cartItems}</ul>
-        <div className={classes.total}>
-          <span>Total Amount</span>
-          <span>{`$${ctx.cartTotal.toFixed(2)}`}</span>
-        </div>
-        {orderClicked && <Checkout onCancelClick={ctx.onCartClick} />}
-        {!orderClicked && modalActions}
-      </Card>
-    </Modal>
-  );
+	const modalActions = (
+		<div className={classes.actions}>
+			<button className={classes["button--alt"]} onClick={ctx.onCartClick}>
+				Close
+			</button>
+			<button className={classes.button} onClick={orderClickHandler}>
+				Order
+			</button>
+		</div>
+	);
+
+	return (
+		<Modal onBackdropClick={ctx.onCartClick}>
+			<Card>
+				<ul className={classes["cart-items"]}>{cartItems}</ul>
+				<div className={classes.total}>
+					<span>Total Amount</span>
+					<span>{`$${ctx.cartTotal.toFixed(2)}`}</span>
+				</div>
+				{orderClicked && <Checkout onCancelClick={ctx.onCartClick} />}
+				{!orderClicked && modalActions}
+			</Card>
+		</Modal>
+	);
 };
 
 export default Cart;
