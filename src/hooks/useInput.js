@@ -36,7 +36,6 @@ const useInput = (isValid) => {
 
 	return [
 		inputState.value,
-		inputState.touched,
 		inputIsInValid,
 		inputChangeHandler,
 		inputBlurHandler,

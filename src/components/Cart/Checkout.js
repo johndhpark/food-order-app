@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
-import { useContext, useRef, useReducer } from "react";
-import CartContext from "../../contexts/cart-context";
-import classes from "./Checkout.module.css";
 import useInput from "../../hooks/useInput";
+import classes from "./Checkout.module.css";
 
 // const actionCreators = {
 // 	name: "UPDATE_NAME",
@@ -27,11 +25,9 @@ import useInput from "../../hooks/useInput";
 // };
 
 const isNotEmpty = (value) => value.trim().length !== 0;
-const isPostal = (value) => {
-	const res = /^\d{5}(?:[- ]?\d{4})?$/.test(value);
-};
+const isPostal = (value) => /^\d{5}(?:[- ]?\d{4})?$/.test(value);
 
-const Checkout = ({ onCancelClick }) => {
+const Checkout = ({ onCancelClick, onOrderSubmit }) => {
 	// const [formState, dispatchFormAction] = useReducer(formReducer, {
 	// 	name: { value: "", touched: false },
 	// 	street: { value: "", touched: false },
@@ -40,7 +36,6 @@ const Checkout = ({ onCancelClick }) => {
 	// });
 	const [
 		nameInputValue,
-		nameInputTouched,
 		nameInputIsInvalid,
 		nameInputChangeHandler,
 		nameInputBlurHandler,
@@ -49,7 +44,6 @@ const Checkout = ({ onCancelClick }) => {
 
 	const [
 		streetInputValue,
-		streetInputTouched,
 		streetInputIsInvalid,
 		streetInputChangeHandler,
 		streetInputBlurHandler,
@@ -58,7 +52,6 @@ const Checkout = ({ onCancelClick }) => {
 
 	const [
 		postalInputValue,
-		postalInputTouched,
 		postalInputIsInvalid,
 		postalInputChangeHandler,
 		postalInputBlurHandler,
@@ -67,7 +60,6 @@ const Checkout = ({ onCancelClick }) => {
 
 	const [
 		cityInputValue,
-		cityInputTouched,
 		cityInputIsInvalid,
 		cityInputChangeHandler,
 		cityInputBlurHandler,
@@ -84,6 +76,13 @@ const Checkout = ({ onCancelClick }) => {
 		event.preventDefault();
 
 		if (formIsInValid) return;
+
+		onOrderSubmit({
+			name: nameInputValue,
+			street: streetInputValue,
+			postal: postalInputValue,
+			city: cityInputValue,
+		});
 
 		nameInputSubmitHandler();
 		streetInputSubmitHandler();
@@ -169,6 +168,7 @@ const Checkout = ({ onCancelClick }) => {
 
 Checkout.propTypes = {
 	onCancelClick: PropTypes.func.isRequired,
+	onOrderSubmit: PropTypes.func.isRequired,
 };
 
 export default Checkout;

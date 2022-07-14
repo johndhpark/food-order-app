@@ -23,6 +23,37 @@ const Cart = () => {
 		setOrderClicked(true);
 	};
 
+	const orderSubmitHandler = async (customerInfo) => {
+		const { items, cartCount: count, cartTotal: total } = ctx;
+
+		// console.log(total);
+
+		const order = JSON.stringify({
+			...customerInfo,
+			count,
+			total,
+			items,
+		});
+
+		try {
+			const res = await fetch(
+				"https://react-http-3b880-default-rtdb.firebaseio.com/orders.json",
+				{
+					method: "POST",
+					body: order,
+				}
+			);
+
+			if (!res.ok) {
+				throw new Error("Something went wrong");
+			}
+
+			ctx.onOrderSubmit();
+		} catch (err) {
+			throw new Error(err.message);
+		}
+	};
+
 	const cartItems = ctx.items.map((item) => (
 		<CartItem
 			key={item.id}
@@ -51,7 +82,12 @@ const Cart = () => {
 					<span>Total Amount</span>
 					<span>{`$${ctx.cartTotal.toFixed(2)}`}</span>
 				</div>
-				{orderClicked && <Checkout onCancelClick={ctx.onCartClick} />}
+				{orderClicked && (
+					<Checkout
+						onCancelClick={ctx.onCartClick}
+						onOrderSubmit={orderSubmitHandler}
+					/>
+				)}
 				{!orderClicked && modalActions}
 			</Card>
 		</Modal>
