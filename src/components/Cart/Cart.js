@@ -8,7 +8,8 @@ import Checkout from "./Checkout";
 
 const Cart = () => {
 	const [orderClicked, setOrderClicked] = useState(false);
-
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [didSubmit, setDidSubmit] = useState(false);
 	const ctx = useContext(CartContext);
 
 	const removeItemHandler = (item) => {
@@ -24,6 +25,7 @@ const Cart = () => {
 	};
 
 	const orderSubmitHandler = async (customerInfo) => {
+		setIsSubmitting(true);
 		const { items, cartCount: count, cartTotal: total } = ctx;
 
 		// console.log(total);
@@ -52,6 +54,9 @@ const Cart = () => {
 		} catch (err) {
 			throw new Error(err.message);
 		}
+
+		setIsSubmitting(false);
+		setDidSubmit(true);
 	};
 
 	const cartItems = ctx.items.map((item) => (
@@ -74,21 +79,32 @@ const Cart = () => {
 		</div>
 	);
 
+	const cartModalContent = (
+		<>
+			<ul className={classes["cart-items"]}>{cartItems}</ul>
+			<div className={classes.total}>
+				<span>Total Amount</span>
+				<span>{`$${ctx.cartTotal.toFixed(2)}`}</span>
+			</div>
+			{orderClicked && (
+				<Checkout
+					onCancelClick={ctx.onCartClick}
+					onOrderSubmit={orderSubmitHandler}
+				/>
+			)}
+			{!orderClicked && modalActions}
+		</>
+	);
+
+	const isSubmittingModalContent = <p>Sending order data...</p>;
+	const didSubmitModalContent = <p>Successfully sent the order!</p>;
+
 	return (
 		<Modal onBackdropClick={ctx.onCartClick}>
 			<Card>
-				<ul className={classes["cart-items"]}>{cartItems}</ul>
-				<div className={classes.total}>
-					<span>Total Amount</span>
-					<span>{`$${ctx.cartTotal.toFixed(2)}`}</span>
-				</div>
-				{orderClicked && (
-					<Checkout
-						onCancelClick={ctx.onCartClick}
-						onOrderSubmit={orderSubmitHandler}
-					/>
-				)}
-				{!orderClicked && modalActions}
+				{!isSubmitting && !didSubmit && cartModalContent}
+				{isSubmitting && isSubmittingModalContent}
+				{!isSubmitting && didSubmit && didSubmitModalContent}
 			</Card>
 		</Modal>
 	);

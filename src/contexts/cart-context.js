@@ -5,12 +5,19 @@ import _ from "lodash";
 const CartContext = React.createContext({
   items: [],
   cartCount: 0,
-  cartTotal: 0.0,
+  cartTotal: 0,
   isActive: false,
   onCartClick: () => {},
   onAddItemToCart: () => {},
   onRemoveItemFromCart: () => {},
 });
+
+const INIT_STATE = {
+  items: [],
+  count: 0,
+  total: 0,
+  isActive: false,
+};
 
 function cartReducer(state, action) {
   switch (action.type) {
@@ -59,7 +66,7 @@ function cartReducer(state, action) {
       return newState;
     }
     case "CLEAR": {
-      return { items: [], count: 0, total: 0.0 };
+      return { ...INIT_STATE };
     }
     default: {
       return state;
@@ -68,11 +75,7 @@ function cartReducer(state, action) {
 }
 
 export const CartProvider = ({ children }) => {
-  const [cartState, dispatchCartAction] = useReducer(cartReducer, {
-    items: [],
-    count: 0,
-    total: 0.0,
-  });
+  const [cartState, dispatchCartAction] = useReducer(cartReducer, INIT_STATE);
   const [active, setActive] = useState(false);
 
   const memoizedCartClickHandler = useCallback(() => {
@@ -89,7 +92,7 @@ export const CartProvider = ({ children }) => {
 
   const orderSubmitHandler = useCallback(() => {
     dispatchCartAction({ type: "CLEAR" });
-    setActive(false);
+    // setActive(false);
   }, []);
 
   const { total, items, count } = cartState;
